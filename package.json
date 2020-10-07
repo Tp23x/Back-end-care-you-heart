@@ -14,5 +14,9 @@
     "express": "^4.17.1",
     "mongoose": "^5.10.4"
   },
+  "engines":{
+    "node": "12.14.0",
+    "npm": "6.13.4"
+  },
   "devDependencies": {}
 }
