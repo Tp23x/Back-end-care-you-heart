@@ -9,7 +9,6 @@ const Band = require('./db/smartwatch')
 const Temperature = require('./db/temperature')
 const Sumdata= require('./db/tempgps')
 const MacAdd= require('./db/macAdd')
-const allinfo = require('./db/allinfo')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
