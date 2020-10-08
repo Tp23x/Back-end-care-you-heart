@@ -10,11 +10,12 @@ const Temperature = require('./db/temperature')
 const Sumdata= require('./db/tempgps')
 const MacAdd= require('./db/macAdd')
 const W= require('./db/W')
+const allinfo = require('./db/allinfo')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
 const app = express()
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 3000
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -603,6 +604,60 @@ app.post('/addW', function(req, res) {
             res.send('fail')
         } else {
             res.send('saved W')
+        }
+    })
+})
+
+//------------------FUNCTION ALLINFO-------------------
+
+app.post('/update-allinfo', function(req, res) { // python should call this api for save lat, long to db
+    const { carid, watch, date, time, lat, long, temp, hum }= req.body
+
+    allinfo.findOneAndUpdate(
+        { carid },
+        { watch, date, time, lat, long, temp, hum }
+    , function(err, success) {
+        if (err) {
+            res.send('fail')
+        } else {
+            res.send('success')
+        }
+    })
+})
+
+app.get('/get-allinfo/:carid', function(req, res) {
+    const carid = req.params.carid
+    allinfo.findOne({ carid }, function(err, success) {
+        if (err) {
+            console.log('err', err)
+            res.send({})
+        } else {
+            res.send(success)
+        }
+    })
+})
+
+app.post('/add-allinfo', function(req, res) {
+    const {  carid, watch, date, time, lat, long, temp, hum} = req.body // json data always come from req.body
+    const newallinfo = new allinfo({
+        carid, watch, date, time, lat, long, temp, hum
+    })
+
+    newallinfo.save(function(err, success) {
+        if (err) {
+            res.send('fail')
+        } else {
+            res.send('saved allinfo')
+        }
+    })
+})
+
+app.get('/get-allinfo-list', function(req, res) {
+    allinfo.find({}, function(err, success) {
+        if (err) {
+            res.send([])
+        } else {
+            res.send(success)
         }
     })
 })
